@@ -14,7 +14,7 @@ const app = express();
 const rawOrigins = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 const allowedOrigins = rawOrigins
   .split(',')
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
 app.use(cors({ origin: allowedOrigins }));
