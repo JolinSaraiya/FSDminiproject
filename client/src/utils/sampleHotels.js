@@ -12,6 +12,7 @@ export const SAMPLE_HOTELS = [
     description:
       'Iconic waterfront luxury hotel offering timeless hospitality, fine dining, and panoramic views of the Gateway of India.',
     gradient: 'from-indigo-600 to-violet-600',
+    imageUrl: '/images/hotel-palace.jpg',
   },
   {
     id: 'hotel-2',
@@ -26,6 +27,7 @@ export const SAMPLE_HOTELS = [
     description:
       'Serene boutique retreat nestled amidst lush greenery, designed for both leisure travelers and business stays.',
     gradient: 'from-emerald-600 to-teal-600',
+    imageUrl: '/images/hotel-resort.jpg',
   },
   {
     id: 'hotel-3',
@@ -40,6 +42,7 @@ export const SAMPLE_HOTELS = [
     description:
       'Modern high-rise hotel tailored for tech professionals with high-speed fiber internet and rooftop dining.',
     gradient: 'from-sky-600 to-blue-700',
+    imageUrl: '/images/hotel-skyline.jpg',
   },
   {
     id: 'hotel-4',
@@ -54,6 +57,7 @@ export const SAMPLE_HOTELS = [
     description:
       'Restored royal mansion blending traditional Rajasthani architecture with contemporary comfort and warm service.',
     gradient: 'from-amber-600 to-orange-600',
+    imageUrl: '/images/hotel-haveli.jpg',
   },
 ];
 

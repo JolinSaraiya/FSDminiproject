@@ -33,6 +33,7 @@ function validateAndBuildHotelPayload(body) {
     amenities,
     description,
     gradient,
+    imageUrl,
   } = body || {};
 
   const requiredStrings = { name, city, address, roomType, description };
@@ -64,6 +65,15 @@ function validateAndBuildHotelPayload(body) {
     return { error: 'availableRooms must be an integer between 0 and totalRooms' };
   }
 
+  const cleanImageUrl = typeof imageUrl === 'string' ? imageUrl.trim() : '';
+  if (
+    cleanImageUrl &&
+    !cleanImageUrl.startsWith('/') &&
+    !/^https?:\/\/.+/i.test(cleanImageUrl)
+  ) {
+    return { error: 'imageUrl must be a valid http(s) URL or /images path' };
+  }
+
   return {
     data: {
       name: name.trim(),
@@ -79,6 +89,7 @@ function validateAndBuildHotelPayload(body) {
         typeof gradient === 'string' && gradient.trim()
           ? gradient.trim()
           : 'from-indigo-600 to-violet-600',
+      imageUrl: cleanImageUrl,
     },
   };
 }

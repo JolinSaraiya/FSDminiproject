@@ -88,7 +88,7 @@ async function createBooking(req, res, next) {
     }
 
     const populated = await Booking.findById(booking._id)
-      .populate('hotel', 'name city address roomType pricePerNight availableRooms gradient')
+      .populate('hotel', 'name city address roomType pricePerNight availableRooms gradient imageUrl')
       .populate('user', 'name email role');
 
     emitSocketEvent(req, 'booking:created', {
@@ -122,7 +122,7 @@ async function createBooking(req, res, next) {
 async function getMyBookings(req, res, next) {
   try {
     const bookings = await Booking.find({ user: req.user._id })
-      .populate('hotel', 'name city address roomType pricePerNight availableRooms gradient')
+      .populate('hotel', 'name city address roomType pricePerNight availableRooms gradient imageUrl')
       .sort({ createdAt: -1 });
 
     return res.status(200).json(bookings);
@@ -177,7 +177,7 @@ async function cancelBooking(req, res, next) {
     );
 
     const populated = await Booking.findById(booking._id)
-      .populate('hotel', 'name city address roomType pricePerNight availableRooms gradient')
+      .populate('hotel', 'name city address roomType pricePerNight availableRooms gradient imageUrl')
       .populate('user', 'name email role');
 
     emitSocketEvent(req, 'booking:cancelled', {

@@ -3,6 +3,7 @@ import Button from '../components/Button';
 import Loading from '../components/Loading';
 import Modal from '../components/Modal';
 import useHotelRealtimeSync from '../hooks/useHotelRealtimeSync';
+import { HOTEL_IMAGE_PRESETS, resolveHotelImage } from '../utils/hotelImages';
 import {
   cancelBooking,
   createHotel,
@@ -24,6 +25,7 @@ const EMPTY_FORM = {
   amenities: '',
   description: '',
   gradient: 'from-indigo-600 to-violet-600',
+  imageUrl: '/images/hotel-palace.jpg',
 };
 
 const GRADIENTS = [
@@ -121,6 +123,7 @@ function AdminDashboard() {
       amenities: Array.isArray(hotel.amenities) ? hotel.amenities.join(', ') : '',
       description: hotel.description || '',
       gradient: hotel.gradient || 'from-indigo-600 to-violet-600',
+      imageUrl: hotel.imageUrl || resolveHotelImage(hotel),
     });
     setFormError('');
     setModalOpen(true);
@@ -296,10 +299,10 @@ function AdminDashboard() {
                   <tr key={hotel._id} className="hover:bg-stone-50/80">
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
-                        <span
-                          className={`h-8 w-8 shrink-0 rounded-xl bg-linear-to-br ${
-                            hotel.gradient || 'from-indigo-600 to-violet-600'
-                          }`}
+                        <img
+                          src={resolveHotelImage(hotel)}
+                          alt={hotel.name}
+                          className="h-10 w-14 shrink-0 rounded-xl object-cover ring-1 ring-stone-200"
                         />
                         <span className="font-semibold text-slate-900">{hotel.name}</span>
                       </div>
@@ -608,6 +611,40 @@ function AdminDashboard() {
               placeholder="Free Wi-Fi, Pool, Breakfast"
               className={inputClass}
             />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="hotel-image" className="block text-xs font-semibold text-slate-700">
+              Property Image URL (or pick a preset below)
+            </label>
+            <input
+              id="hotel-image"
+              name="imageUrl"
+              value={formData.imageUrl}
+              onChange={handleFormChange}
+              placeholder="https://... or /images/hotel-palace.jpg"
+              className={inputClass}
+            />
+            <div className="grid grid-cols-4 gap-2">
+              {HOTEL_IMAGE_PRESETS.map((preset) => (
+                <button
+                  key={preset.value}
+                  type="button"
+                  onClick={() => setFormData((prev) => ({ ...prev, imageUrl: preset.value }))}
+                  className={`cursor-pointer overflow-hidden rounded-xl border-2 transition ${
+                    formData.imageUrl === preset.value
+                      ? 'border-amber-500 ring-2 ring-amber-500/30'
+                      : 'border-stone-200 hover:border-stone-400'
+                  }`}
+                >
+                  <img
+                    src={preset.value}
+                    alt={preset.label}
+                    className="h-10 w-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
           </div>
 
           <div>

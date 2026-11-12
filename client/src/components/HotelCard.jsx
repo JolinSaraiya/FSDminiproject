@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { getFallbackHotelImage, resolveHotelImage } from '../utils/hotelImages';
 import Button from './Button';
 
 function HotelCard({ hotel, onBook }) {
@@ -14,26 +16,43 @@ function HotelCard({ hotel, onBook }) {
     gradient = 'from-indigo-600 to-violet-600',
   } = hotel;
 
+  const primaryImage = resolveHotelImage(hotel);
+  const fallbackImage = getFallbackHotelImage(hotel);
+  const [failedUrl, setFailedUrl] = useState('');
+
+  const activeImage = failedUrl === primaryImage ? fallbackImage : primaryImage;
   const isAvailable = availableRooms > 0;
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-3xl border border-stone-200/90 bg-white shadow-sm transition duration-300 hover:-translate-y-1.5 hover:border-amber-300/80 hover:shadow-xl">
-      {/* Editorial Header Banner */}
-      <div className={`relative h-44 overflow-hidden bg-linear-to-br ${gradient} p-5 text-white`}>
+      {/* Property Photo Banner */}
+      <div className={`relative h-52 overflow-hidden bg-linear-to-br ${gradient} p-5 text-white`}>
+        <img
+          src={activeImage}
+          alt={`${name} in ${city}`}
+          loading="lazy"
+          onError={() => {
+            if (activeImage !== fallbackImage) {
+              setFailedUrl(primaryImage);
+            }
+          }}
+          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_60%)]"
+          className="absolute inset-0 bg-linear-to-t from-slate-950/85 via-slate-950/20 to-slate-950/45"
         />
+
         <div className="relative z-10 flex h-full flex-col justify-between">
           <div className="flex items-start justify-between gap-2">
-            <span className="rounded-full border border-white/25 bg-slate-950/35 px-3 py-1 text-xs font-semibold tracking-wide text-white backdrop-blur-md">
+            <span className="rounded-full border border-white/25 bg-slate-950/55 px-3 py-1 text-xs font-semibold tracking-wide text-white backdrop-blur-md">
               {roomType}
             </span>
             <span
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-xs ${
                 isAvailable
-                  ? 'bg-emerald-950/75 text-emerald-200 ring-1 ring-emerald-400/40 backdrop-blur-md'
-                  : 'bg-rose-950/80 text-rose-200 ring-1 ring-rose-400/40 backdrop-blur-md'
+                  ? 'bg-emerald-950/80 text-emerald-200 ring-1 ring-emerald-400/40 backdrop-blur-md'
+                  : 'bg-rose-950/85 text-rose-200 ring-1 ring-rose-400/40 backdrop-blur-md'
               }`}
             >
               <span
@@ -45,8 +64,14 @@ function HotelCard({ hotel, onBook }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-sm font-medium text-white/95">
-            <svg className="h-4 w-4 shrink-0 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div className="flex items-center gap-1.5 text-sm font-semibold text-white drop-shadow-xs">
+            <svg
+              className="h-4 w-4 shrink-0 text-amber-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
