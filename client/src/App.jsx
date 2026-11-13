@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Hotels from './pages/Hotels';
 import Login from './pages/Login';
 import MyBookings from './pages/MyBookings';
+import Profile from './pages/Profile';
 import Register from './pages/Register';
 
 function App() {
@@ -20,6 +21,14 @@ function App() {
             <Route path="/hotels" element={<Hotels />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/my-bookings"
               element={

@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { getCurrentUser, loginUser, registerUser } from '../services/api';
+import {
+  changePassword,
+  getCurrentUser,
+  loginUser,
+  registerUser,
+  updateProfile,
+} from '../services/api';
 import { AuthContext } from './authContext';
 
 const TOKEN_KEY = 'stayHubToken';
@@ -36,8 +42,14 @@ function AuthProvider({ children }) {
         }
       });
 
+    function handleExpired() {
+      setUser(null);
+    }
+    window.addEventListener('auth:expired', handleExpired);
+
     return () => {
       active = false;
+      window.removeEventListener('auth:expired', handleExpired);
     };
   }, []);
 
@@ -55,13 +67,34 @@ function AuthProvider({ children }) {
     return data;
   }
 
+  async function updateUserProfile(name) {
+    const data = await updateProfile({ name });
+    setUser((prev) => (prev ? { ...prev, ...data.user } : data.user));
+    return data;
+  }
+
+  async function changeUserPassword(currentPassword, newPassword) {
+    const data = await changePassword({ currentPassword, newPassword });
+    return data;
+  }
+
   function logout() {
     localStorage.removeItem(TOKEN_KEY);
     setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, authLoading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        authLoading,
+        login,
+        register,
+        updateUserProfile,
+        changeUserPassword,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

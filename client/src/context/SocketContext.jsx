@@ -10,6 +10,7 @@ const REALTIME_EVENTS = [
   'hotel:deleted',
   'booking:created',
   'booking:cancelled',
+  'activity:logged',
 ];
 
 function SocketProvider({ children }) {
@@ -21,7 +22,13 @@ function SocketProvider({ children }) {
   const toastTimerRef = useRef(null);
 
   useEffect(() => {
-    const socket = io(SOCKET_URL);
+    const socket = io(SOCKET_URL, {
+      transports: ['polling', 'websocket'],
+      reconnection: true,
+      reconnectionAttempts: 30,
+      reconnectionDelay: 1500,
+      timeout: 10000,
+    });
 
     function handleConnect() {
       setConnected(true);

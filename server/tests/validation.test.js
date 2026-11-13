@@ -107,4 +107,32 @@ test('Mongoose schemas enforce domain validation rules cleanly', async () => {
     () => badActivity.validate(),
     (err) => Boolean(err.errors?.type),
   );
+
+  const shortPasswordUser = new User({
+    name: 'Short Pass',
+    email: 'short@example.com',
+    password: '123',
+  });
+  await assert.rejects(
+    () => shortPasswordUser.validate(),
+    (err) => Boolean(err.errors?.password),
+  );
+});
+
+test('Hotel model price and room counts must not be negative', async () => {
+  const negativePriceHotel = new Hotel({
+    name: 'Negative Hotel',
+    city: 'Mumbai',
+    address: 'Colaba, Mumbai',
+    roomType: 'Standard Room',
+    pricePerNight: -500,
+    totalRooms: 10,
+    availableRooms: 10,
+    description: 'Testing price validation rule.',
+  });
+
+  await assert.rejects(
+    () => negativePriceHotel.validate(),
+    (err) => Boolean(err.errors?.pricePerNight),
+  );
 });

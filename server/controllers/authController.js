@@ -11,6 +11,8 @@ function formatUserResponse(user) {
     name: user.name,
     email: user.email,
     role: user.role,
+    createdAt: user.createdAt,
+    lastLoginAt: user.lastLoginAt,
   };
 }
 
@@ -124,8 +126,95 @@ function getCurrentUser(req, res) {
   });
 }
 
+// PUT /api/auth/profile
+async function updateProfile(req, res, next) {
+  try {
+    const name = typeof req.body?.name === 'string' ? req.body.name.trim() : '';
+
+    if (!name) {
+      return res.status(400).json({ message: 'Name is required' });
+    }
+
+    if (name.length < 2 || name.length > 60) {
+      return res.status(400).json({ message: 'Name must be between 2 and 60 characters' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { name },
+      { new: true, runValidators: true },
+    );
+
+    await logActivity({
+      req,
+      type: 'USER_PROFILE_UPDATED',
+      message: `User updated profile name to "${name}"`,
+      userId: req.user._id,
+      metadata: { newName: name, email: req.user.email },
+    });
+
+    return res.status(200).json({
+      message: 'Profile updated successfully',
+      user: formatUserResponse(updatedUser),
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+// PUT /api/auth/change-password
+async function changePassword(req, res, next) {
+  try {
+    const currentPassword =
+      typeof req.body?.currentPassword === 'string' ? req.body.currentPassword : '';
+    const newPassword =
+      typeof req.body?.newPassword === 'string' ? req.body.newPassword : '';
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'Current password and new password are required' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'New password must be at least 6 characters' });
+    }
+
+    if (Buffer.byteLength(newPassword, 'utf8') > 72) {
+      return res.status(400).json({ message: 'New password is too long' });
+    }
+
+    const user = await User.findById(req.user._id).select('+password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Current password is incorrect' });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 12);
+    await user.save();
+
+    await logActivity({
+      req,
+      type: 'USER_PASSWORD_CHANGED',
+      message: `Password changed for user ${user.name} (${user.email})`,
+      userId: user._id,
+      metadata: { email: user.email },
+    });
+
+    return res.status(200).json({
+      message: 'Password changed successfully',
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
   getCurrentUser,
+  updateProfile,
+  changePassword,
 };

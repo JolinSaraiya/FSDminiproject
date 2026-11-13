@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import useSocket from '../hooks/useSocket';
 import NotificationBell from './NotificationBell';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { connected } = useSocket();
   const navigate = useNavigate();
 
   function closeMenu() {
@@ -41,6 +43,11 @@ function Navbar() {
           My Stays
         </NavLink>
       )}
+      {user && (
+        <NavLink to="/profile" onClick={closeMenu} className={linkClass}>
+          Profile
+        </NavLink>
+      )}
       {user?.role === 'admin' && (
         <NavLink to="/admin" onClick={closeMenu} className={linkClass}>
           Admin Console
@@ -71,11 +78,33 @@ function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-2 md:flex">
           <div className="mr-2 flex items-center gap-1">{navItems}</div>
+
+          {/* Real-time Socket Indicator */}
+          <div
+            className={`mr-2 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold transition ${
+              connected
+                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                : 'border-amber-500/30 bg-amber-500/10 text-amber-300'
+            }`}
+            title={connected ? 'Socket.IO Real-Time Stream Connected' : 'Connecting to Socket.IO...'}
+          >
+            <span
+              className={`h-1.5 w-1.5 rounded-full ${
+                connected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+              }`}
+            />
+            {connected ? 'Live Sync' : 'Connecting'}
+          </div>
+
           <NotificationBell />
           <div className="mx-2 h-5 w-px bg-white/10" />
           {user ? (
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 py-1 pr-3 pl-1.5">
+              <Link
+                to="/profile"
+                className="flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 py-1 pr-3 pl-1.5 transition hover:border-amber-400/50 hover:bg-white/10"
+                title="View Profile & JWT Session"
+              >
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-300">
                   {initial}
                 </span>
@@ -85,7 +114,7 @@ function Navbar() {
                     {user.role}
                   </p>
                 </div>
-              </div>
+              </Link>
               <button
                 type="button"
                 onClick={handleLogout}

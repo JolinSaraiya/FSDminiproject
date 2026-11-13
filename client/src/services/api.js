@@ -18,6 +18,10 @@ async function apiRequest(path, options = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
+    if (response.status === 401 && token) {
+      localStorage.removeItem(TOKEN_KEY);
+      window.dispatchEvent(new CustomEvent('auth:expired'));
+    }
     throw new Error(data.message || 'Request failed');
   }
 
@@ -42,8 +46,25 @@ export function getCurrentUser() {
   return apiRequest('/auth/me');
 }
 
-export function getHotels() {
-  return apiRequest('/hotels');
+export function updateProfile(profileData) {
+  return apiRequest('/auth/profile', {
+    method: 'PUT',
+    body: JSON.stringify(profileData),
+  });
+}
+
+export function changePassword(passwordData) {
+  return apiRequest('/auth/change-password', {
+    method: 'PUT',
+    body: JSON.stringify(passwordData),
+  });
+}
+
+export function getHotels(params = {}) {
+  const query = new URLSearchParams(
+    Object.entries(params).filter(([, v]) => v !== undefined && v !== '' && v !== null),
+  ).toString();
+  return apiRequest(`/hotels${query ? `?${query}` : ''}`);
 }
 
 export function getHotelById(id) {
@@ -98,4 +119,10 @@ export function getActivities(params = {}) {
 
 export function getActivityStats() {
   return apiRequest('/activities/stats');
+}
+
+export function simulateActivity() {
+  return apiRequest('/activities/simulate', {
+    method: 'POST',
+  });
 }

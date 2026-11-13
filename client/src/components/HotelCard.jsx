@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { getFallbackHotelImage, resolveHotelImage } from '../utils/hotelImages';
 import Button from './Button';
 
-function HotelCard({ hotel, onBook }) {
+function HotelCard({ hotel, onBook, isRecentlyBooked = false }) {
   const {
     name,
     city,
@@ -24,7 +24,13 @@ function HotelCard({ hotel, onBook }) {
   const isAvailable = availableRooms > 0;
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-3xl border border-stone-200/90 bg-white shadow-sm transition duration-300 hover:-translate-y-1.5 hover:border-amber-300/80 hover:shadow-xl">
+    <article
+      className={`group flex flex-col overflow-hidden rounded-3xl border bg-white shadow-sm transition duration-300 hover:-translate-y-1.5 hover:border-amber-300/80 hover:shadow-xl ${
+        isRecentlyBooked
+          ? 'border-amber-400 ring-4 ring-amber-400/40 ring-offset-2'
+          : 'border-stone-200/90'
+      }`}
+    >
       {/* Property Photo Banner */}
       <div className={`relative h-52 overflow-hidden bg-linear-to-br ${gradient} p-5 text-white`}>
         <img
@@ -48,20 +54,26 @@ function HotelCard({ hotel, onBook }) {
             <span className="rounded-full border border-white/25 bg-slate-950/55 px-3 py-1 text-xs font-semibold tracking-wide text-white backdrop-blur-md">
               {roomType}
             </span>
-            <span
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-xs ${
-                isAvailable
-                  ? 'bg-emerald-950/80 text-emerald-200 ring-1 ring-emerald-400/40 backdrop-blur-md'
-                  : 'bg-rose-950/85 text-rose-200 ring-1 ring-rose-400/40 backdrop-blur-md'
-              }`}
-            >
+            {isRecentlyBooked ? (
+              <span className="animate-pulse rounded-full bg-amber-400 px-3 py-1 text-xs font-bold text-slate-950 shadow-md">
+                ⚡ Just Reserved!
+              </span>
+            ) : (
               <span
-                className={`h-1.5 w-1.5 rounded-full ${
-                  isAvailable ? 'animate-pulse bg-emerald-400' : 'bg-rose-400'
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-xs ${
+                  isAvailable
+                    ? 'bg-emerald-950/80 text-emerald-200 ring-1 ring-emerald-400/40 backdrop-blur-md'
+                    : 'bg-rose-950/85 text-rose-200 ring-1 ring-rose-400/40 backdrop-blur-md'
                 }`}
-              />
-              {isAvailable ? `${availableRooms} of ${totalRooms || availableRooms} left` : 'Sold Out'}
-            </span>
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${
+                    isAvailable ? 'animate-pulse bg-emerald-400' : 'bg-rose-400'
+                  }`}
+                />
+                {isAvailable ? `${availableRooms} of ${totalRooms || availableRooms} left` : 'Sold Out'}
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-1.5 text-sm font-semibold text-white drop-shadow-xs">

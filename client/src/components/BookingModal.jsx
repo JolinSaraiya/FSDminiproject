@@ -10,6 +10,14 @@ function formatDateInput(offsetDays = 0) {
   return d.toISOString().split('T')[0];
 }
 
+function getNextDay(dateString) {
+  if (!dateString) return formatDateInput(1);
+  const d = new Date(dateString);
+  if (Number.isNaN(d.getTime())) return formatDateInput(1);
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().split('T')[0];
+}
+
 function BookingModal({ hotel, onClose, onBooked }) {
   const [checkInDate, setCheckInDate] = useState(() => formatDateInput(0));
   const [checkOutDate, setCheckOutDate] = useState(() => formatDateInput(1));
@@ -20,6 +28,14 @@ function BookingModal({ hotel, onClose, onBooked }) {
   const [confirmedBooking, setConfirmedBooking] = useState(null);
 
   if (!hotel) return null;
+
+  function handleCheckInChange(newCheckIn) {
+    setCheckInDate(newCheckIn);
+    const minOut = getNextDay(newCheckIn);
+    if (!checkOutDate || checkOutDate <= newCheckIn) {
+      setCheckOutDate(minOut);
+    }
+  }
 
   const start = new Date(checkInDate);
   const end = new Date(checkOutDate);
@@ -138,7 +154,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
                 type="date"
                 min={formatDateInput(0)}
                 value={checkInDate}
-                onChange={(e) => setCheckInDate(e.target.value)}
+                onChange={(e) => handleCheckInChange(e.target.value)}
                 required
                 className={inputClass}
               />
@@ -154,7 +170,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
               <input
                 id="booking-checkout"
                 type="date"
-                min={checkInDate || formatDateInput(0)}
+                min={getNextDay(checkInDate)}
                 value={checkOutDate}
                 onChange={(e) => setCheckOutDate(e.target.value)}
                 required

@@ -97,7 +97,14 @@ function validateAndBuildHotelPayload(body) {
 // GET /api/hotels
 async function getHotels(req, res, next) {
   try {
-    const { search = '', roomType = '', maxPrice = '', availableOnly = '' } = req.query;
+    const {
+      search = '',
+      roomType = '',
+      maxPrice = '',
+      availableOnly = '',
+      sort = 'recommended',
+      amenity = '',
+    } = req.query;
     const filter = {};
 
     const cleanSearch = String(search).trim();
@@ -111,6 +118,11 @@ async function getHotels(req, res, next) {
       filter.roomType = cleanRoomType;
     }
 
+    const cleanAmenity = String(amenity).trim();
+    if (cleanAmenity && cleanAmenity !== 'All') {
+      filter.amenities = { $in: [new RegExp(`^${escapeRegex(cleanAmenity)}$`, 'i')] };
+    }
+
     const parsedMaxPrice = Number(maxPrice);
     if (maxPrice !== '' && Number.isFinite(parsedMaxPrice) && parsedMaxPrice > 0) {
       filter.pricePerNight = { $lte: parsedMaxPrice };
@@ -120,7 +132,18 @@ async function getHotels(req, res, next) {
       filter.availableRooms = { $gt: 0 };
     }
 
-    const hotels = await Hotel.find(filter).sort({ createdAt: -1 });
+    let sortOption = { createdAt: -1 };
+    if (sort === 'price_asc') {
+      sortOption = { pricePerNight: 1 };
+    } else if (sort === 'price_desc') {
+      sortOption = { pricePerNight: -1 };
+    } else if (sort === 'rooms_desc') {
+      sortOption = { availableRooms: -1 };
+    } else if (sort === 'name_asc') {
+      sortOption = { name: 1 };
+    }
+
+    const hotels = await Hotel.find(filter).sort(sortOption);
     return res.status(200).json(hotels);
   } catch (error) {
     return next(error);

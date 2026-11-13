@@ -5,6 +5,23 @@ import useAuth from '../hooks/useAuth';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function getPasswordStrength(password) {
+  if (!password) return { score: 0, label: '', color: 'bg-stone-200' };
+  let score = 0;
+  if (password.length >= 6) score += 1;
+  if (password.length >= 8) score += 1;
+  if (/[0-9]/.test(password)) score += 1;
+  if (/[^A-Za-z0-9]/.test(password)) score += 1;
+
+  if (score <= 1)
+    return { score: 25, label: 'Weak (min 6 characters required)', color: 'bg-rose-500' };
+  if (score === 2)
+    return { score: 50, label: 'Fair (add numbers & symbols for strength)', color: 'bg-amber-500' };
+  if (score === 3)
+    return { score: 75, label: 'Good (strong password)', color: 'bg-sky-500' };
+  return { score: 100, label: 'Excellent (very strong password)', color: 'bg-emerald-500' };
+}
+
 function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -18,6 +35,8 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const strength = getPasswordStrength(formData.password);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -168,6 +187,17 @@ function Register() {
                     {showPassword ? 'Hide' : 'Show'}
                   </button>
                 </div>
+                {formData.password && (
+                  <div className="mt-1.5 space-y-1">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-stone-200">
+                      <div
+                        className={`h-full transition-all duration-300 ${strength.color}`}
+                        style={{ width: `${strength.score}%` }}
+                      />
+                    </div>
+                    <p className="text-[11px] font-medium text-slate-600">{strength.label}</p>
+                  </div>
+                )}
               </div>
 
               <div>

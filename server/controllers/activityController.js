@@ -57,8 +57,28 @@ async function getActivityStats(req, res, next) {
   }
 }
 
+// POST /api/activities/simulate (admin)
+async function simulateLiveEvent(req, res, next) {
+  try {
+    const activity = await logActivity({
+      req,
+      type: 'BOOKING_CREATED',
+      message: `[Live Demo] Guest reserved 1 suite at The Taj Mahal Palace (Live Simulation)`,
+      userId: req.user._id,
+      metadata: { simulated: true, triggeredBy: req.user.name },
+    });
+    return res.status(200).json({
+      message: 'Simulated real-time event dispatched across all connected clients',
+      activity,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   getActivities,
   getActivityStats,
+  simulateLiveEvent,
 };
 

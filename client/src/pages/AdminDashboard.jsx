@@ -11,6 +11,7 @@ import {
   getActivities,
   getAllBookings,
   getHotels,
+  simulateActivity,
   updateHotel,
 } from '../services/api';
 
@@ -68,8 +69,20 @@ function AdminDashboard() {
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [formError, setFormError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [simulating, setSimulating] = useState(false);
 
   useHotelRealtimeSync({ setHotels, setBookings, setActivities });
+
+  async function handleSimulateLiveEvent() {
+    try {
+      setSimulating(true);
+      await simulateActivity();
+    } catch (err) {
+      setError(err.message || 'Failed to simulate live event.');
+    } finally {
+      setSimulating(false);
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -218,9 +231,19 @@ function AdminDashboard() {
               Manage properties, reservations, and monitor live persisted Docker MongoDB events.
             </p>
           </div>
-          <Button variant="accent" onClick={openCreateModal} className="px-5 py-3">
-            + Add New Property
-          </Button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={handleSimulateLiveEvent}
+              loading={simulating}
+              className="border-amber-400/40 text-amber-300 hover:bg-amber-400/10"
+            >
+              ⚡ Simulate Live Event
+            </Button>
+            <Button variant="accent" onClick={openCreateModal} className="px-5 py-3">
+              + Add New Property
+            </Button>
+          </div>
         </div>
       </section>
 
