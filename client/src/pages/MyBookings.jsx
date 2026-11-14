@@ -4,6 +4,7 @@ import Button from '../components/Button';
 import Loading from '../components/Loading';
 import useAuth from '../hooks/useAuth';
 import { cancelBooking, getMyBookings } from '../services/api';
+import { downloadBookingIcs } from '../utils/calendar';
 
 function formatDisplayDate(isoDate) {
   return new Date(isoDate).toLocaleDateString('en-IN', {
@@ -185,15 +186,27 @@ function MyBookings() {
                       <p className="font-mono text-[11px] text-slate-400">
                         ID: {booking._id.slice(-8).toUpperCase()}
                       </p>
-                      {isConfirmed && (
-                        <Button
-                          variant="danger"
-                          disabled={cancellingId === booking._id}
-                          onClick={() => handleCancel(booking._id)}
-                        >
-                          {cancellingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
-                        </Button>
-                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {isConfirmed && (
+                          <button
+                            type="button"
+                            onClick={() => downloadBookingIcs(booking, booking.hotel)}
+                            className="cursor-pointer rounded-xl border border-stone-300/80 bg-white/90 px-3 py-2 text-xs font-bold text-slate-800 shadow-2xs transition hover:bg-stone-100"
+                            title="Download calendar .ics event"
+                          >
+                            📅 Pass (.ics)
+                          </button>
+                        )}
+                        {isConfirmed && (
+                          <Button
+                            variant="danger"
+                            disabled={cancellingId === booking._id}
+                            onClick={() => handleCancel(booking._id)}
+                          >
+                            {cancellingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

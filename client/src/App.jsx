@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
 import MobileBottomNav from './components/MobileBottomNav';
+import ViewportBadge from './components/ViewportBadge';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminDashboard from './pages/AdminDashboard';
@@ -65,6 +66,7 @@ function App() {
         </main>
         <Footer />
         <BackToTop />
+        <ViewportBadge />
         <MobileBottomNav />
       </div>
     </BrowserRouter>

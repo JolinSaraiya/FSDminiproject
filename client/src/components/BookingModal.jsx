@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import { createBooking } from '../services/api';
+import { downloadBookingIcs } from '../utils/calendar';
 import Button from './Button';
 import Modal from './Modal';
 
@@ -129,7 +130,16 @@ function BookingModal({ hotel, onClose, onBooked }) {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-2">
+            <button
+              type="button"
+              onClick={() => downloadBookingIcs(confirmedBooking, hotel)}
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/15 px-4 py-3 text-sm font-bold text-amber-900 transition hover:bg-amber-500/25 shadow-xs cursor-pointer"
+              title="Add reservation event to Apple Calendar / Google Calendar / Outlook"
+            >
+              <span>📅</span>
+              <span>Add to Calendar (.ics)</span>
+            </button>
             <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
               Keep Exploring
             </Button>
