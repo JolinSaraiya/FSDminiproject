@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer';
+import BackToTop from './components/BackToTop';
 import MobileBottomNav from './components/MobileBottomNav';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -63,6 +64,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <BackToTop />
         <MobileBottomNav />
       </div>
     </BrowserRouter>

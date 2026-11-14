@@ -76,8 +76,9 @@ function MobileBottomNav() {
 
   return (
     <aside
+      id="mobile-bottom-nav"
       aria-label="Mobile Bottom Navigation"
-      className="fixed bottom-3 inset-x-3 z-40 max-w-lg mx-auto md:hidden"
+      className="fixed bottom-3 inset-x-3 z-40 max-w-lg mx-auto md:hidden transition-all duration-300"
     >
       <nav className="rounded-2xl border border-white/20 bg-slate-950/85 p-1.5 shadow-2xl shadow-slate-950/50 backdrop-blur-2xl">
         <ul className="flex items-center justify-around gap-1">

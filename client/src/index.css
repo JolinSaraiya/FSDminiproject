@@ -61,3 +61,8 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Auto-hide bottom nav when modal / bottom sheet is active */
+body.modal-open #mobile-bottom-nav {
+  display: none !important;
+}

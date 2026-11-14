@@ -19,9 +19,30 @@ function HotelCard({ hotel, onBook, isRecentlyBooked = false }) {
   const primaryImage = resolveHotelImage(hotel);
   const fallbackImage = getFallbackHotelImage(hotel);
   const [failedUrl, setFailedUrl] = useState('');
+  const [shared, setShared] = useState(false);
 
   const activeImage = failedUrl === primaryImage ? fallbackImage : primaryImage;
   const isAvailable = availableRooms > 0;
+
+  async function handleShare(e) {
+    e.stopPropagation();
+    const shareData = {
+      title: `${name} | StayHub Luxury Stays`,
+      text: `Reserve ${name} in ${city} on StayHub at ₹${pricePerNight}/night.`,
+      url: window.location.href,
+    };
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // User dismissed share dialog
+      }
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(`${name} in ${city} — ${window.location.href}`);
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    }
+  }
 
   return (
     <article
@@ -54,26 +75,43 @@ function HotelCard({ hotel, onBook, isRecentlyBooked = false }) {
             <span className="rounded-full border border-white/25 bg-slate-950/55 px-3 py-1 text-xs font-semibold tracking-wide text-white backdrop-blur-md">
               {roomType}
             </span>
-            {isRecentlyBooked ? (
-              <span className="animate-pulse rounded-full bg-amber-400 px-3 py-1 text-xs font-bold text-slate-950 shadow-md">
-                ⚡ Just Reserved!
-              </span>
-            ) : (
-              <span
-                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-xs ${
-                  isAvailable
-                    ? 'bg-emerald-950/80 text-emerald-200 ring-1 ring-emerald-400/40 backdrop-blur-md'
-                    : 'bg-rose-950/85 text-rose-200 ring-1 ring-rose-400/40 backdrop-blur-md'
-                }`}
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleShare}
+                aria-label="Share property"
+                title="Share property via Mobile Share Sheet"
+                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-slate-950/60 text-white backdrop-blur-md transition hover:bg-slate-900 shadow-xs"
               >
+                {shared ? (
+                  <span className="text-[10px] font-bold text-emerald-400">✓</span>
+                ) : (
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                  </svg>
+                )}
+              </button>
+              {isRecentlyBooked ? (
+                <span className="animate-pulse rounded-full bg-amber-400 px-3 py-1 text-xs font-bold text-slate-950 shadow-md">
+                  ⚡ Just Reserved!
+                </span>
+              ) : (
                 <span
-                  className={`h-1.5 w-1.5 rounded-full ${
-                    isAvailable ? 'animate-pulse bg-emerald-400' : 'bg-rose-400'
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-xs ${
+                    isAvailable
+                      ? 'bg-emerald-950/80 text-emerald-200 ring-1 ring-emerald-400/40 backdrop-blur-md'
+                      : 'bg-rose-950/85 text-rose-200 ring-1 ring-rose-400/40 backdrop-blur-md'
                   }`}
-                />
-                {isAvailable ? `${availableRooms} of ${totalRooms || availableRooms} left` : 'Sold Out'}
-              </span>
-            )}
+                >
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full ${
+                      isAvailable ? 'animate-pulse bg-emerald-400' : 'bg-rose-400'
+                    }`}
+                  />
+                  {isAvailable ? `${availableRooms} of ${totalRooms || availableRooms} left` : 'Sold Out'}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center gap-1.5 text-sm font-semibold text-white drop-shadow-xs">
