@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import useSocket from '../hooks/useSocket';
+import { useCurrency } from '../context/CurrencyContext';
 import NotificationBell from './NotificationBell';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const { connected } = useSocket();
+  const { currency, setCurrency, currencies } = useCurrency();
   const navigate = useNavigate();
 
   function closeMenu() {
@@ -96,6 +98,26 @@ function Navbar() {
             {connected ? 'Live Sync' : 'Connecting'}
           </div>
 
+          {/* Multi-Currency Selector */}
+          <div className="relative mr-1 inline-flex items-center">
+            <select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              aria-label="Select Currency"
+              className="cursor-pointer appearance-none rounded-full border border-white/20 bg-white/5 py-1 pl-2.5 pr-6 text-xs font-bold text-amber-300 transition hover:border-amber-400/60 hover:bg-white/10 outline-none backdrop-blur-md"
+              title="Change Global Currency (State recalculated live)"
+            >
+              {currencies.map((c) => (
+                <option key={c.code} value={c.code} className="bg-slate-900 text-white font-medium">
+                  {c.symbol.trim()} {c.code}
+                </option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-2 text-[8px] text-amber-400">
+              ▼
+            </span>
+          </div>
+
           <NotificationBell />
           <div className="mx-2 h-5 w-px bg-white/10" />
           {user ? (
@@ -143,6 +165,25 @@ function Navbar() {
 
         {/* Mobile Actions */}
         <div className="flex items-center gap-2 md:hidden">
+          {/* Multi-Currency Mobile Selector */}
+          <div className="relative inline-flex items-center">
+            <select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              aria-label="Select Currency"
+              className="cursor-pointer appearance-none rounded-full border border-white/20 bg-white/5 py-1 pl-2 pr-5 text-[11px] font-bold text-amber-300 outline-none backdrop-blur-md"
+            >
+              {currencies.map((c) => (
+                <option key={c.code} value={c.code} className="bg-slate-900 text-white font-medium">
+                  {c.symbol.trim()} {c.code}
+                </option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-1.5 text-[7px] text-amber-400">
+              ▼
+            </span>
+          </div>
+
           <NotificationBell />
           <button
             type="button"

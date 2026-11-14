@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import { useCurrency } from '../context/CurrencyContext';
 import { createBooking } from '../services/api';
 import { downloadBookingIcs } from '../utils/calendar';
+import DigitalPassModal from './DigitalPassModal';
 import Button from './Button';
 import Modal from './Modal';
 
@@ -22,6 +24,7 @@ function getNextDay(dateString) {
 
 function BookingModal({ hotel, onClose, onBooked }) {
   const { user } = useAuth();
+  const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,6 +35,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [confirmedBooking, setConfirmedBooking] = useState(null);
+  const [showPass, setShowPass] = useState(false);
 
   if (!hotel) return null;
 
@@ -125,7 +129,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
             <div className="mt-4 flex items-center justify-between border-t border-emerald-200/80 pt-3 text-sm">
               <span className="font-medium text-emerald-800">Total Confirmed</span>
               <span className="font-serif text-xl font-extrabold text-emerald-950">
-                ₹{Number(confirmedBooking.totalPrice).toLocaleString('en-IN')}
+                {formatPrice(confirmedBooking.totalPrice)}
               </span>
             </div>
           </div>
@@ -133,12 +137,20 @@ function BookingModal({ hotel, onClose, onBooked }) {
           <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-2">
             <button
               type="button"
+              onClick={() => setShowPass(true)}
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 rounded-xl border border-amber-500/50 bg-linear-to-r from-amber-400 to-amber-500 px-4 py-3 text-sm font-extrabold text-slate-950 shadow-md shadow-amber-500/25 transition hover:from-amber-300 hover:to-amber-400 cursor-pointer"
+            >
+              <span>🎫</span>
+              <span>VIP Boarding Pass (QR)</span>
+            </button>
+            <button
+              type="button"
               onClick={() => downloadBookingIcs(confirmedBooking, hotel)}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/15 px-4 py-3 text-sm font-bold text-amber-900 transition hover:bg-amber-500/25 shadow-xs cursor-pointer"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-stone-300 bg-white px-4 py-3 text-sm font-bold text-slate-800 transition hover:bg-stone-100 shadow-2xs cursor-pointer"
               title="Add reservation event to Apple Calendar / Google Calendar / Outlook"
             >
               <span>📅</span>
-              <span>Add to Calendar (.ics)</span>
+              <span>Pass (.ics)</span>
             </button>
             <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
               Keep Exploring
@@ -151,6 +163,13 @@ function BookingModal({ hotel, onClose, onBooked }) {
               View My Stays →
             </Link>
           </div>
+
+          <DigitalPassModal
+            booking={confirmedBooking}
+            hotel={hotel}
+            isOpen={showPass}
+            onClose={() => setShowPass(false)}
+          />
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -160,9 +179,9 @@ function BookingModal({ hotel, onClose, onBooked }) {
               <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">
                 Nightly Rate
               </p>
-              <p className="mt-0.5 text-base font-extrabold text-slate-900">
-                ₹{Number(hotel.pricePerNight).toLocaleString('en-IN')}{' '}
-                <span className="text-xs font-normal text-slate-500">/ night</span>
+              <p className="mt-0.5 font-serif text-base font-extrabold text-slate-900">
+                {formatPrice(hotel.pricePerNight)}{' '}
+                <span className="text-xs font-normal text-slate-500 font-sans">/ night</span>
               </p>
             </div>
             <span className="rounded-full bg-emerald-500/15 border border-emerald-500/30 px-3 py-1 text-xs font-bold text-emerald-800">
@@ -282,7 +301,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
           <div className="rounded-2xl border border-amber-200/70 bg-amber-50/70 p-4 text-sm backdrop-blur-md">
             <div className="flex items-center justify-between text-xs text-slate-600">
               <span>
-                ₹{Number(hotel.pricePerNight).toLocaleString('en-IN')} × {roomsBooked} room(s) ×{' '}
+                {formatPrice(hotel.pricePerNight)} × {roomsBooked} room(s) ×{' '}
                 {nights > 0 ? nights : 0} night(s)
               </span>
               <span className="font-medium text-emerald-800">Taxes Included</span>
@@ -290,7 +309,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
             <div className="mt-2 flex items-center justify-between border-t border-amber-200/60 pt-2">
               <span className="font-semibold text-slate-900">Estimated Total</span>
               <span className="font-serif text-2xl font-extrabold text-slate-950">
-                ₹{estimatedTotal.toLocaleString('en-IN')}
+                {formatPrice(estimatedTotal)}
               </span>
             </div>
           </div>
@@ -306,7 +325,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
             <div>
               <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Price</p>
               <p className="font-serif text-lg font-extrabold text-slate-950">
-                ₹{estimatedTotal.toLocaleString('en-IN')}
+                {formatPrice(estimatedTotal)}
               </p>
             </div>
             <div className="flex items-center gap-2">

@@ -45,6 +45,7 @@ function Hotels() {
 
   const [bookingHotel, setBookingHotel] = useState(null);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [viewMode, setViewMode] = useState('grid');
 
   // Sync URL search param into state
   useEffect(() => {
@@ -412,15 +413,65 @@ function Hotels() {
         )}
 
         {!loading && !error && filteredHotels.length > 0 && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredHotels.map((hotel) => (
-              <HotelCard
-                key={hotel._id}
-                hotel={hotel}
-                onBook={handleBookClick}
-                isRecentlyBooked={hotel._id === recentlyBookedHotelId}
-              />
-            ))}
+          <div className="space-y-4">
+            {/* View Mode Bar */}
+            <div className="flex items-center justify-between px-1">
+              <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">
+                Curated Properties ({filteredHotels.length})
+              </p>
+              <div className="flex items-center gap-1 rounded-2xl border border-white/70 bg-white/80 p-1 shadow-2xs backdrop-blur-md">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('grid')}
+                  className={`cursor-pointer rounded-xl px-3 py-1 text-xs font-bold transition ${
+                    viewMode === 'grid'
+                      ? 'bg-amber-500 text-slate-950 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="Grid Layout View"
+                >
+                  ⊞ Grid
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('list')}
+                  className={`cursor-pointer rounded-xl px-3 py-1 text-xs font-bold transition ${
+                    viewMode === 'list'
+                      ? 'bg-amber-500 text-slate-950 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                  title="Compact List Layout View"
+                >
+                  ☰ List
+                </button>
+              </div>
+            </div>
+
+            {viewMode === 'grid' ? (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {filteredHotels.map((hotel) => (
+                  <HotelCard
+                    key={hotel._id}
+                    hotel={hotel}
+                    layout="grid"
+                    onBook={handleBookClick}
+                    isRecentlyBooked={hotel._id === recentlyBookedHotelId}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredHotels.map((hotel) => (
+                  <HotelCard
+                    key={hotel._id}
+                    hotel={hotel}
+                    layout="list"
+                    onBook={handleBookClick}
+                    isRecentlyBooked={hotel._id === recentlyBookedHotelId}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
 import useAuth from '../hooks/useAuth';
+import { useCurrency } from '../context/CurrencyContext';
 import { cancelBooking, getMyBookings } from '../services/api';
 import { downloadBookingIcs } from '../utils/calendar';
+import DigitalPassModal from '../components/DigitalPassModal';
 
 function formatDisplayDate(isoDate) {
   return new Date(isoDate).toLocaleDateString('en-IN', {
@@ -17,10 +19,12 @@ function formatDisplayDate(isoDate) {
 
 function MyBookings() {
   const { user } = useAuth();
+  const { formatPrice } = useCurrency();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [cancellingId, setCancellingId] = useState('');
+  const [selectedPass, setSelectedPass] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -103,8 +107,8 @@ function MyBookings() {
             </div>
             <div className="rounded-3xl border border-white/70 bg-white/75 p-5 shadow-lg shadow-stone-900/5 backdrop-blur-xl">
               <p className="text-xs font-semibold text-slate-500 uppercase">Confirmed Value</p>
-              <p className="mt-1.5 text-2xl font-extrabold text-slate-900">
-                ₹{totalConfirmedSpend.toLocaleString('en-IN')}
+              <p className="mt-1.5 font-serif text-2xl font-extrabold text-slate-900">
+                {formatPrice(totalConfirmedSpend)}
               </p>
             </div>
           </div>
@@ -180,13 +184,23 @@ function MyBookings() {
                     </div>
 
                     <div className="flex flex-col items-start gap-2.5 sm:items-end">
-                      <p className="text-2xl font-extrabold text-slate-900">
-                        ₹{Number(booking.totalPrice).toLocaleString('en-IN')}
+                      <p className="font-serif text-2xl font-extrabold text-slate-900">
+                        {formatPrice(booking.totalPrice)}
                       </p>
                       <p className="font-mono text-[11px] text-slate-400">
                         ID: {booking._id.slice(-8).toUpperCase()}
                       </p>
                       <div className="flex flex-wrap items-center gap-2">
+                        {isConfirmed && (
+                          <button
+                            type="button"
+                            onClick={() => setSelectedPass(booking)}
+                            className="cursor-pointer rounded-xl border border-amber-400/60 bg-linear-to-r from-amber-400 to-amber-500 px-3 py-2 text-xs font-extrabold text-slate-950 shadow-xs transition hover:from-amber-300 hover:to-amber-400"
+                            title="View Scannable VIP Boarding Pass"
+                          >
+                            🎫 Digital Pass
+                          </button>
+                        )}
                         {isConfirmed && (
                           <button
                             type="button"
@@ -215,6 +229,13 @@ function MyBookings() {
           </div>
         )}
       </div>
+
+      <DigitalPassModal
+        booking={selectedPass}
+        hotel={selectedPass?.hotel}
+        isOpen={Boolean(selectedPass)}
+        onClose={() => setSelectedPass(null)}
+      />
     </div>
   );
 }

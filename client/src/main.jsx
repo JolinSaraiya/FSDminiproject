@@ -4,6 +4,7 @@ import App from './App.jsx';
 import AuthProvider from './context/AuthContext.jsx';
 import SocketProvider from './context/SocketContext.jsx';
 import { HotelProvider } from './context/HotelContext.jsx';
+import { CurrencyProvider } from './context/CurrencyContext.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import './index.css';
 
@@ -12,9 +13,11 @@ createRoot(document.getElementById('root')).render(
     <ErrorBoundary>
       <AuthProvider>
         <SocketProvider>
-          <HotelProvider>
-            <App />
-          </HotelProvider>
+          <CurrencyProvider>
+            <HotelProvider>
+              <App />
+            </HotelProvider>
+          </CurrencyProvider>
         </SocketProvider>
       </AuthProvider>
     </ErrorBoundary>
