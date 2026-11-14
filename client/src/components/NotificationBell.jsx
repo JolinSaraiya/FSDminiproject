@@ -46,8 +46,8 @@ function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-50 mt-3 w-80 max-w-[90vw] overflow-hidden rounded-2xl border border-stone-200 bg-white text-slate-900 shadow-2xl">
-          <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/80 px-4 py-3">
+        <div className="absolute right-0 z-50 mt-3 w-80 max-w-[90vw] overflow-hidden rounded-3xl border border-white/70 bg-white/85 text-slate-900 shadow-2xl backdrop-blur-2xl">
+          <div className="flex items-center justify-between border-b border-stone-200/50 bg-white/50 px-4 py-3 backdrop-blur-md">
             <div>
               <h2 className="text-sm font-bold text-slate-900">Real-Time Feed</h2>
               <p className="mt-0.5 flex items-center gap-1.5 text-[11px] font-medium text-slate-500">

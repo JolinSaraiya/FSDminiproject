@@ -25,10 +25,10 @@ function HotelCard({ hotel, onBook, isRecentlyBooked = false }) {
 
   return (
     <article
-      className={`group flex flex-col overflow-hidden rounded-3xl border bg-white shadow-sm transition duration-300 hover:-translate-y-1.5 hover:border-amber-300/80 hover:shadow-xl ${
+      className={`group flex flex-col overflow-hidden rounded-3xl border bg-white/75 backdrop-blur-xl shadow-lg shadow-stone-950/5 transition duration-300 hover:-translate-y-1.5 hover:border-amber-400/80 hover:shadow-2xl hover:shadow-stone-900/15 ${
         isRecentlyBooked
-          ? 'border-amber-400 ring-4 ring-amber-400/40 ring-offset-2'
-          : 'border-stone-200/90'
+          ? 'border-amber-400 ring-4 ring-amber-400/50 ring-offset-2'
+          : 'border-white/70'
       }`}
     >
       {/* Property Photo Banner */}
@@ -124,7 +124,7 @@ function HotelCard({ hotel, onBook, isRecentlyBooked = false }) {
             {amenities.slice(0, 4).map((amenity) => (
               <span
                 key={amenity}
-                className="rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1 text-[11px] font-medium text-slate-600"
+                className="rounded-xl border border-white/60 bg-white/70 px-2.5 py-1 text-[11px] font-medium text-slate-700 backdrop-blur-xs shadow-2xs"
               >
                 {amenity}
               </span>
@@ -137,7 +137,7 @@ function HotelCard({ hotel, onBook, isRecentlyBooked = false }) {
             variant={isAvailable ? 'primary' : 'secondary'}
             disabled={!isAvailable}
             onClick={() => onBook?.(hotel)}
-            className="w-full py-3"
+            className="w-full min-h-[46px] py-3 font-bold"
           >
             {isAvailable ? 'Reserve Stay' : 'Currently Unavailable'}
           </Button>

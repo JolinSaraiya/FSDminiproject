@@ -81,11 +81,11 @@ function Register() {
   }
 
   const inputClass =
-    'w-full rounded-xl border border-stone-300 bg-stone-50/50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20';
+    'w-full rounded-2xl border border-stone-200/80 bg-white/70 backdrop-blur-md px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20';
 
   return (
-    <div className="flex min-h-[calc(100vh-4.5rem)] items-center justify-center bg-stone-100 px-6 py-12">
-      <div className="grid w-full max-w-4xl overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-2xl shadow-stone-900/10 md:grid-cols-5">
+    <div className="flex min-h-[calc(100vh-4.5rem)] items-center justify-center px-4 sm:px-6 py-10 md:py-12">
+      <div className="grid w-full max-w-4xl overflow-hidden rounded-3xl border border-white/70 bg-white/80 shadow-2xl shadow-stone-950/10 backdrop-blur-2xl md:grid-cols-5">
         {/* Left Editorial Panel */}
         <div className="relative hidden flex-col justify-between overflow-hidden bg-slate-950 p-10 text-white md:col-span-2 md:flex">
           <div

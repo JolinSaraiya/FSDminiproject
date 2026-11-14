@@ -99,10 +99,10 @@ function Profile() {
   }
 
   const inputClass =
-    'w-full rounded-xl border border-stone-300 bg-stone-50/50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20';
+    'w-full rounded-2xl border border-stone-200/80 bg-white/70 backdrop-blur-md px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20';
 
   return (
-    <div className="min-h-screen bg-stone-100 py-10 px-6">
+    <div className="min-h-screen py-8 md:py-10 px-4 sm:px-6">
       <div className="mx-auto max-w-5xl space-y-8">
         {/* Header */}
         <div>
@@ -122,7 +122,7 @@ function Profile() {
           {/* Column 1: Identity & Live JWT Proof Card */}
           <div className="space-y-6 md:col-span-1">
             {/* Identity Card */}
-            <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
+            <div className="rounded-3xl border border-white/70 bg-white/75 p-6 shadow-xl shadow-stone-900/5 backdrop-blur-2xl">
               <div className="flex items-center gap-4">
                 <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-amber-400 to-orange-500 text-xl font-bold text-slate-950 shadow-md">
                   {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
@@ -144,7 +144,7 @@ function Profile() {
             </div>
 
             {/* Live JWT Inspection Card — PROOF FOR MA'AM */}
-            <div className="rounded-3xl border border-amber-300/80 bg-amber-50/50 p-6 shadow-sm">
+            <div className="rounded-3xl border border-amber-300/80 bg-amber-50/70 p-6 shadow-xl shadow-amber-500/5 backdrop-blur-2xl">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold tracking-wider text-amber-800 uppercase">
                   🔐 Active JWT Token
@@ -197,7 +197,7 @@ function Profile() {
           {/* Column 2: Forms for Name & Password */}
           <div className="space-y-6 md:col-span-2">
             {/* Update Name Form */}
-            <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
+            <div className="rounded-3xl border border-white/70 bg-white/75 p-6 shadow-xl shadow-stone-900/5 backdrop-blur-2xl">
               <h3 className="font-serif text-lg font-bold text-slate-950">
                 Personal Information
               </h3>
@@ -234,7 +234,7 @@ function Profile() {
                     type="email"
                     value={user?.email || ''}
                     disabled
-                    className="w-full rounded-xl border border-stone-200 bg-stone-100 px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed"
+                    className="w-full rounded-2xl border border-stone-200/80 bg-stone-100/80 px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed"
                   />
                   <p className="mt-1 text-[11px] text-slate-400">
                     Email address cannot be changed (primary login identifier).
@@ -250,7 +250,7 @@ function Profile() {
             </div>
 
             {/* Change Password Form */}
-            <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
+            <div className="rounded-3xl border border-white/70 bg-white/75 p-6 shadow-xl shadow-stone-900/5 backdrop-blur-2xl">
               <h3 className="font-serif text-lg font-bold text-slate-950">
                 Security &amp; Password
               </h3>
@@ -322,3 +322,4 @@ function Profile() {
 }
 
 export default Profile;
+

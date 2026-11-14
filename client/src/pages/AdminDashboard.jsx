@@ -248,53 +248,53 @@ function AdminDashboard() {
       </section>
 
       <div className="mx-auto max-w-7xl px-6 py-10">
-        {/* Summary Stats */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-xs">
-            <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">Properties</p>
-            <p className="mt-2 text-3xl font-extrabold text-slate-900">{hotels.length}</p>
+        {/* Summary Stats (Responsive 2x2 Glass Grid on Mobile) */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          <div className="rounded-3xl border border-white/70 bg-white/75 p-4 sm:p-5 shadow-lg shadow-stone-900/5 backdrop-blur-xl">
+            <p className="text-[11px] sm:text-xs font-bold tracking-wider text-slate-500 uppercase">Properties</p>
+            <p className="mt-1.5 sm:mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">{hotels.length}</p>
           </div>
-          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-xs">
-            <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">
+          <div className="rounded-3xl border border-white/70 bg-white/75 p-4 sm:p-5 shadow-lg shadow-stone-900/5 backdrop-blur-xl">
+            <p className="text-[11px] sm:text-xs font-bold tracking-wider text-slate-500 uppercase">
               Available Rooms
             </p>
-            <p className="mt-2 text-3xl font-extrabold text-emerald-600">{totalAvailableRooms}</p>
+            <p className="mt-1.5 sm:mt-2 text-2xl sm:text-3xl font-extrabold text-emerald-600">{totalAvailableRooms}</p>
           </div>
-          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-xs">
-            <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">
+          <div className="rounded-3xl border border-white/70 bg-white/75 p-4 sm:p-5 shadow-lg shadow-stone-900/5 backdrop-blur-xl">
+            <p className="text-[11px] sm:text-xs font-bold tracking-wider text-slate-500 uppercase">
               Confirmed Stays
             </p>
-            <p className="mt-2 text-3xl font-extrabold text-amber-600">{confirmedBookings}</p>
+            <p className="mt-1.5 sm:mt-2 text-2xl sm:text-3xl font-extrabold text-amber-600">{confirmedBookings}</p>
           </div>
-          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-xs">
-            <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">
-              Persisted Events
+          <div className="rounded-3xl border border-white/70 bg-white/75 p-4 sm:p-5 shadow-lg shadow-stone-900/5 backdrop-blur-xl">
+            <p className="text-[11px] sm:text-xs font-bold tracking-wider text-slate-500 uppercase">
+              Live Events
             </p>
-            <p className="mt-2 text-3xl font-extrabold text-slate-900">{activities.length}</p>
+            <p className="mt-1.5 sm:mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">{activities.length}</p>
           </div>
         </div>
 
         {error && (
-          <p role="alert" className="mt-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
+          <p role="alert" className="mt-6 rounded-2xl border border-rose-300/60 bg-rose-50/80 px-4 py-3 text-sm font-medium text-rose-700 backdrop-blur-md">
             {error}
           </p>
         )}
 
-        {/* Navigation Tabs */}
-        <div className="mt-8 flex flex-wrap gap-2 border-b border-stone-200 pb-3">
+        {/* Navigation Tabs (Mobile Touch-Scrollable) */}
+        <div className="mt-8 flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar border-b border-stone-200/50">
           {[
             { id: 'hotels', label: `Properties (${hotels.length})` },
             { id: 'bookings', label: `Bookings (${bookings.length})` },
-            { id: 'activities', label: `Live DB Activity Log (${activities.length})` },
+            { id: 'activities', label: `Live Activity Log (${activities.length})` },
           ].map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`cursor-pointer rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+              className={`shrink-0 cursor-pointer rounded-2xl px-4 py-2.5 text-xs sm:text-sm font-semibold transition backdrop-blur-md ${
                 activeTab === tab.id
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'border border-stone-200 bg-white text-slate-700 hover:bg-stone-100'
+                  ? 'bg-slate-900 text-white shadow-md'
+                  : 'border border-white/60 bg-white/70 text-slate-700 hover:bg-white'
               }`}
             >
               {tab.label}

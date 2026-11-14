@@ -180,14 +180,14 @@ function Home() {
       </section>
 
       {/* Pillars */}
-      <section className="mx-auto -mt-8 max-w-7xl px-6">
+      <section className="mx-auto -mt-8 max-w-7xl px-4 sm:px-6">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {PILLARS.map((item) => (
             <div
               key={item.title}
-              className="rounded-2xl border border-stone-200/90 bg-white p-6 shadow-md shadow-stone-900/5"
+              className="rounded-3xl border border-white/70 bg-white/75 p-6 shadow-xl shadow-stone-900/5 backdrop-blur-2xl transition hover:-translate-y-1 hover:border-amber-400/60"
             >
-              <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 ring-1 ring-amber-200/60">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-400/15 border border-amber-400/30 shadow-xs">
                 {item.icon}
               </div>
               <h2 className="mt-4 font-serif text-lg font-bold text-slate-900">{item.title}</h2>
@@ -198,7 +198,7 @@ function Home() {
       </section>
 
       {/* Featured Hotels */}
-      <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-14 md:py-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-xs font-bold tracking-widest text-amber-700 uppercase">

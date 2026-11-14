@@ -215,3 +215,4 @@ export function useHotelState() {
 }
 
 export default HotelContext;
+

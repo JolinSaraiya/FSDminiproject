@@ -89,18 +89,18 @@ function MyBookings() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-5xl px-6 py-10">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
         {!loading && bookings.length > 0 && (
-          <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-xs">
+          <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-3xl border border-white/70 bg-white/75 p-5 shadow-lg shadow-stone-900/5 backdrop-blur-xl">
               <p className="text-xs font-semibold text-slate-500 uppercase">Total Bookings</p>
               <p className="mt-1.5 text-2xl font-extrabold text-slate-900">{bookings.length}</p>
             </div>
-            <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-xs">
+            <div className="rounded-3xl border border-white/70 bg-white/75 p-5 shadow-lg shadow-stone-900/5 backdrop-blur-xl">
               <p className="text-xs font-semibold text-slate-500 uppercase">Active Confirmed</p>
               <p className="mt-1.5 text-2xl font-extrabold text-emerald-600">{confirmedCount}</p>
             </div>
-            <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-xs">
+            <div className="rounded-3xl border border-white/70 bg-white/75 p-5 shadow-lg shadow-stone-900/5 backdrop-blur-xl">
               <p className="text-xs font-semibold text-slate-500 uppercase">Confirmed Value</p>
               <p className="mt-1.5 text-2xl font-extrabold text-slate-900">
                 ₹{totalConfirmedSpend.toLocaleString('en-IN')}
@@ -110,7 +110,7 @@ function MyBookings() {
         )}
 
         {error && (
-          <p role="alert" className="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
+          <p role="alert" className="mb-6 rounded-2xl border border-rose-300/60 bg-rose-50/80 px-4 py-3 text-sm font-medium text-rose-700 backdrop-blur-md">
             {error}
           </p>
         )}
@@ -118,7 +118,7 @@ function MyBookings() {
         {loading ? (
           <Loading message="Loading your reservations..." />
         ) : bookings.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-stone-300 bg-white p-14 text-center shadow-xs">
+          <div className="rounded-3xl border border-white/70 bg-white/75 p-12 text-center shadow-lg backdrop-blur-2xl">
             <p className="font-serif text-xl font-bold text-slate-800">No reservations yet</p>
             <p className="mt-1.5 text-sm text-slate-500">
               Browse our curated collection and lock in your next hotel stay.
@@ -137,7 +137,7 @@ function MyBookings() {
               return (
                 <div
                   key={booking._id}
-                  className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-xs transition hover:shadow-md"
+                  className="overflow-hidden rounded-3xl border border-white/70 bg-white/80 shadow-lg shadow-stone-900/5 backdrop-blur-2xl transition hover:shadow-xl"
                 >
                   <div className="flex flex-col justify-between gap-5 p-6 sm:flex-row sm:items-center">
                     <div className="space-y-2">

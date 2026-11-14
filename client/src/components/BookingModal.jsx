@@ -80,7 +80,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
   }
 
   const inputClass =
-    'w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20';
+    'w-full rounded-2xl border border-stone-200/90 bg-white/70 backdrop-blur-md px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-500/20';
 
   return (
     <Modal
@@ -91,7 +91,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
     >
       {confirmedBooking ? (
         <div className="space-y-5">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/80 p-5 text-emerald-950">
+          <div className="rounded-3xl border border-emerald-300/60 bg-emerald-50/70 p-5 text-emerald-950 backdrop-blur-xl shadow-xs">
             <div className="flex items-center gap-2.5">
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
                 ✓
@@ -126,7 +126,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="flex items-center justify-between rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3.5 text-sm">
+          <div className="flex items-center justify-between rounded-2xl border border-white/60 bg-white/60 p-4 text-sm backdrop-blur-md shadow-xs">
             <div>
               <p className="text-xs font-semibold tracking-wider text-slate-500 uppercase">
                 Live Rate
@@ -136,7 +136,7 @@ function BookingModal({ hotel, onClose, onBooked }) {
                 <span className="text-xs font-normal text-slate-500">/ night</span>
               </p>
             </div>
-            <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
+            <span className="rounded-full bg-emerald-500/15 border border-emerald-500/25 px-3 py-1 text-xs font-semibold text-emerald-800 backdrop-blur-xs">
               {hotel.availableRooms} room(s) available
             </span>
           </div>
